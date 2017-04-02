@@ -1,5 +1,5 @@
 import alt from '../config/alt';
-import MessageActions from '../actions/UserActions';
+import UserActions from '../actions/UserActions';
 
 export class UserStore {
 
@@ -8,7 +8,7 @@ export class UserStore {
     this.errorMessage = null;
 
     this.bindListeners({
-      handleUpdateUser: MessageActions.UPDATE_USER
+      handleUpdateUser: UserActions.UPDATE_USER
     });
   }
 

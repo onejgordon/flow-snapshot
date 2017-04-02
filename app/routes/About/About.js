@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, Image, View, Button } from 'react-native';
+import images from '../../config/images';
 
 class About extends Component {
   static navigationOptions = {
@@ -14,6 +15,11 @@ class About extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={{padding: 10}}>
+
+        <Image
+          source={images.logo}
+        />
+
         <Text>This is an app!</Text>
 
         <Button

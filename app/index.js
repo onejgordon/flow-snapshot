@@ -20,6 +20,7 @@ class FlowMobile extends Component {
     }
 
     onChange(state) {
+        console.log(state);
         this.setState({
           user: state.user
         });

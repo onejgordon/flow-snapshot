@@ -53,3 +53,4 @@ fastlane/Preview.html
 fastlane/screenshots
 
 app/config/secrets.js
+android/app/google-services.json

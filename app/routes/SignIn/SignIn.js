@@ -14,20 +14,28 @@ class SignIn extends Component {
     }
 
     _signIn() {
-        GoogleSignin.configure({
-          iosClientId: '', // only for iOS
-          webClientId: secrets.CLIENT_ID
+        GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
+            // play services are available. can now configure library
+            GoogleSignin.configure({
+              iosClientId: '', // only for iOS
+              webClientId: secrets.WEB_CLIENT_ID
+            })
+            .then(() => {
+                GoogleSignin.signIn().then((user) => {
+                    UserActions.updateUser(user);
+                }).catch((err) => {
+                    console.error('WRONG SIGNIN', err);
+                })
+            });
+
         })
-        .then(() => {
-            UserActions.updateUser();
-        });
     }
 
     render() {
         return (
             <GoogleSigninButton
                 style={{width: 250, height: 48}}
-                color={GoogleSigninButton.Color.Dark}
+                color={GoogleSigninButton.Color.Light}
                 onPress={this._signIn.bind(this)}/>
             )
     }

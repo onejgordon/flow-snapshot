@@ -5,10 +5,12 @@ import {GoogleSignin} from 'react-native-google-signin';
 
 export class UserActions {
 
-  updateUser() {
-    console.log('updateUser');
+  updateUser(_user) {
+    console.log('updateUser', _user);
+    if (_user != null) return _user;
     return (dispatch) => {
       GoogleSignin.currentUserAsync().then((user) => {
+        console.log(['USER', user]);
         dispatch(user);
       }).done();
     }
