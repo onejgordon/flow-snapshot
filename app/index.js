@@ -2,19 +2,27 @@ import React, { Component } from 'react';
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
 import settings from './config/settings';
+import UserStore from './stores/UserStore';
 import {GoogleSignin} from 'react-native-google-signin';
 
 class FlowMobile extends Component {
     constructor(props) {
         super(props);
-        this.state = {user: null};
+        this.state = UserStore.getState();
     }
 
     componentDidMount() {
-        GoogleSignin.currentUserAsync().then((user) => {
-            console.log('USER', user);
-            this.setState({user: user});
-        }).done();
+        UserStore.listen(this.onChange.bind(this));
+    }
+
+    componentWillUnmount() {
+        UserStore.unlisten(this.onChange.bind(this));
+    }
+
+    onChange(state) {
+        this.setState({
+          user: state.user
+        });
     }
 
     render() {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import UserActions from '../../actions/UserActions';
 import secrets from '../../config/secrets';
 
 class SignIn extends Component {
@@ -18,7 +19,7 @@ class SignIn extends Component {
           webClientId: secrets.CLIENT_ID
         })
         .then(() => {
-          // you can now call currentUserAsync()
+            UserActions.updateUser();
         });
     }
 
