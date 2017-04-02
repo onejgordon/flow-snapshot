@@ -1,4 +1,4 @@
-package com.flowandroid;
+package co.flowdash.mobile;
 
 import com.facebook.react.ReactActivity;
 

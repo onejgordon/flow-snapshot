@@ -1,4 +1,4 @@
-package com.flowandroid;
+package co.flowdash.mobile;
 
 import android.app.Application;
 

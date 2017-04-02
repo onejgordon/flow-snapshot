@@ -1,16 +1,13 @@
 import React from 'react';
-import ExNavigator from '@exponent/react-native-navigator';
-import Routes from '../../config/routes';
+import {
+  StackNavigator,
+} from 'react-navigation';
+import SignIn from '../../routes/SignIn';
+import About from '../../routes/About';
 
-const LoggedOut = () => {
-  const route = Routes.getSignInRoute();
-  return (
-    <ExNavigator
-      initialRoute={route}
-      style={{ flex: 1 }}
-      showNavigationBar={route.showNavigationBar}
-    />
-  );
-};
+const LoggedOut = StackNavigator({
+  About: {screen: About},
+  SignIn: {screen: SignIn},
+})
 
 export default LoggedOut;

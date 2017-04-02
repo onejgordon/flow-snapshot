@@ -1,31 +1,30 @@
 import React, { Component } from 'react';
-
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
-import Loading from './components/Loading';
 import settings from './config/settings';
+import {GoogleSignin} from 'react-native-google-signin';
 
-const FlowMobileApp = (props) => {
-  const { status, user, loggingIn } = props;
+class FlowMobile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {user: null};
+    }
 
-  if (status.connected === false || loggingIn) {
-    return <Loading />;
-  } else if (user !== null) {
-    return <LoggedIn />;
-  }
-  return <LoggedOut />;
+    componentDidMount() {
+        GoogleSignin.currentUserAsync().then((user) => {
+            console.log('USER', user);
+            this.setState({user: user});
+        }).done();
+    }
+
+    render() {
+        if (this.state.user !== null) {
+            return <LoggedIn />;
+        }
+        return <LoggedOut />;
+    }
+
 };
 
-FlowMobileApp.propTypes = {
-  status: React.PropTypes.object,
-  user: React.PropTypes.object,
-  loggingIn: React.PropTypes.bool,
-};
 
-export default createContainer(() => {
-  return {
-    // status: Meteor.status(),
-    // user: Meteor.user(),
-    // loggingIn: Meteor.loggingIn(),
-  };
-}, FlowMobileApp);
+export default FlowMobile;
