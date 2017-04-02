@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />                       <!-- <- Add this line -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>           <!-- <- Add this line -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -26,7 +29,6 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
 
 </manifest>

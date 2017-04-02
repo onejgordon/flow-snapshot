@@ -3,6 +3,11 @@ import { Image } from 'react-native';
 import { AppRegistry, Text, TextInput, View } from 'react-native';
 
 class Settings extends Component {
+  static navigationOptions = {
+    tabBar: {
+      label: 'Settings',
+    }
+  }
   constructor(props) {
     super(props);
     this.state = {text: ''};

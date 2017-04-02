@@ -4,6 +4,7 @@ import LoggedIn from './layouts/LoggedIn';
 import settings from './config/settings';
 import UserStore from './stores/UserStore';
 import {GoogleSignin} from 'react-native-google-signin';
+import notifications from './notifications';
 
 class FlowMobile extends Component {
     constructor(props) {
@@ -13,6 +14,10 @@ class FlowMobile extends Component {
 
     componentDidMount() {
         UserStore.listen(this.onChange.bind(this));
+        notifications.setup(this.navigator);
+
+        // Test notif
+        notifications.schedule_snapshot(new Date(new Date().getTime() + 30 * 1000)); // 30 secs
     }
 
     componentWillUnmount() {
@@ -28,7 +33,7 @@ class FlowMobile extends Component {
 
     render() {
         if (this.state.user !== null) {
-            return <LoggedIn />;
+            return <LoggedIn ref={nav => { this.navigator = nav; }} />;
         }
         return <LoggedOut />;
     }

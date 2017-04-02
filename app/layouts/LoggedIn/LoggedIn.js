@@ -1,13 +1,17 @@
 import React from 'react';
 import {
-  StackNavigator,
+  TabNavigator,
 } from 'react-navigation';
-import Report from '../../routes/Report';
+import Snapshot from '../../routes/Snapshot';
 import Settings from '../../routes/Settings';
 
-const LoggedIn = StackNavigator({
-  Report: {screen: Report},
-  Settings: {screen: Settings}
+const LoggedIn = TabNavigator({
+  Settings: {screen: Settings},
+  Snapshot: {screen: Snapshot},
+}, {
+  tabBarOptions: {
+    activeTintColor: '#ECC748',
+  },
 })
 
 export default LoggedIn;
