@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 
 var PushNotification = require('react-native-push-notification');
-var util = require('./util');
+import util from './util';
 
 const notifications = {
 
@@ -76,51 +76,36 @@ const notifications = {
 		})
 	},
 
-	schedule_all_reminders_for_week: (reminders_per_week, _last_scheduled_reminder, start_hour, end_hour) => {
-		console.log(reminders_per_week)
-		console.log(last_scheduled_reminder)
-		console.log(start_hour)
-		let last_scheduled_reminder;
-		if (typeof _last_scheduled_reminder === 'string') last_scheduled_reminder = new Date(_last_scheduled_reminder);
-		else last_scheduled_reminder = null;
+	schedule_all_reminders_for_week: (reminders_per_week, _start_hour, _end_hour) => {
+		let start_hour = _start_hour || 8;
+		let end_hour = _end_hour || 23;
 		let now = new Date();
-		let do_schedule = true;
-		if (last_scheduled_reminder) {
-			let seconds_until_last_scheduled = (last_scheduled_reminder.getTime() - now.getTime()) / 1000;
-			let days_until = seconds_until_last_scheduled / 60 / 60 / 24;
-			if (days_until > 7) do_schedule = false;
+		let first_day;
+		notifications.cancel_all_scheduled();
+		first_day = new Date(now.getTime());
+		first_day.setDate(first_day.getDate() + 1); // Day after last
+		let start_minute = start_hour * 60;
+		let end_minute = end_hour * 60;
+		let schedule_times = [];
+		for (let i = 0; i < reminders_per_week; i++) {
+			let day_index = parseInt(Math.random() * 6);
+			let minute_in = start_minute + parseInt(Math.random() * (end_minute - start_minute));
+			let date = new Date(first_day.getTime());
+			date.setDate(date.getDate() + day_index);
+			let hr = parseInt(minute_in / 60);
+			let min = minute_in % 60;
+			date.setHours(hr);
+			date.setMinutes(min);
+			schedule_times.push(date);
 		}
-		console.log('do_schedule ' + do_schedule);
-		if (do_schedule) {
-			let first_day;
-			if (!last_scheduled_reminder) last_scheduled_reminder = now;
-			first_day = new Date(now.getTime());
-			first_day.setDate(first_day.getDate() + 1); // Day after last
-			let start_minute = start_hour * 60;
-			let end_minute = end_hour * 60;
-			let schedule_times = [];
-			for (let i = 0; i < reminders_per_week; i++) {
-				let day_index = parseInt(Math.random() * 6);
-				let minute_in = start_minute + parseInt(Math.random() * (end_minute - start_minute));
-				let date = new Date(first_day.getTime());
-				date.setDate(date.getDate() + day_index);
-				let hr = parseInt(minute_in / 60);
-				let min = minute_in % 60;
-				date.setHour(hr);
-				date.setMinute(min);
-				schedule_times.push(date);
-			}
-			console.log(schedule_times);
-			schedule_times.forEach((when) => {
-				schedule_snapshot(when);
-			});
-			// Return last time scheduled
-			if (schedule_times.length > 0) return util.print_iso_date(schedule_times.sort()[schedule_times.length - 1].getTime());
-			else return null;
-		}
+		console.log(schedule_times);
+		schedule_times.forEach((when) => {
+			notifications.schedule_snapshot(when);
+		});
 	},
 
     cancel_all_scheduled: () => {
+    	console.log("cancelling scheduled reminders...");
     	PushNotification.cancelAllLocalNotifications()
     }
 };

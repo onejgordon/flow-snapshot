@@ -3,7 +3,7 @@
 import alt from '../config/alt';
 import {GoogleSignin} from 'react-native-google-signin';
 
-export class UserActions {
+class UserActions {
 
   constructor() {
       // Automatic action
@@ -18,25 +18,7 @@ export class UserActions {
         dispatch(user);
       }).done();
     }
-    //   console.log('USER', user);
-    //   this.dispatch(user);
-    // }).done();
   }
-
-  // fetchMessages(location) {
-  //   this.dispatch();
-  //   MessagesFetcher.fetch(location)
-  //     .then((messages)=>{
-  //       this.actions.updateMessages(messages); })
-  //     .catch((e)=>{
-  //       console.log('Response Error', e);
-  //       this.actions.messagesFailed(e);
-  //     });
-  // }
-
-  // messagesFailed(errorMessage) {
-  //   this.dispatch(errorMessage);
-  // }
 }
 
 export default alt.createActions(UserActions);

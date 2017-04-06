@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  TabNavigator,
+  DrawerNavigator,
+  ToolbarAndroid
 } from 'react-navigation';
 import Snapshot from '../../routes/Snapshot';
 import Settings from '../../routes/Settings';
+import Home from '../../routes/Home';
 
-const LoggedIn = TabNavigator({
+const LoggedIn = DrawerNavigator({
+  Home: {screen: Home},
   Settings: {screen: Settings},
   Snapshot: {screen: Snapshot},
 }, {
-  tabBarOptions: {
-    activeTintColor: '#ECC748',
-  },
 })
 
 export default LoggedIn;

@@ -1,8 +1,9 @@
 import alt from '../config/alt';
 import UserActions from '../actions/UserActions';
 import {AsyncStorage, ToastAndroid} from 'react-native';
+import notifications from '../util/notifications';
 
-export class UserStore {
+class UserStore {
 
   constructor() {
     this.bindActions(UserActions);
@@ -26,10 +27,19 @@ export class UserStore {
   }
 
   onUpdateUserSetting(payload) {
+    let reschedule = false;
     Object.keys(payload).forEach((k) => {
-      console.log(k + ' -> ' + payload[k]);
       this.settings[k] = payload[k];
+      if (['start_hr', 'end_hr', 'reminders_per_week'].indexOf(k) > -1) reschedule = true;
     })
+    if (reschedule) {
+      notifications.schedule_all_reminders_for_week(
+        this.settings.reminders_per_week,
+        this.settings.start_hr,
+        this.settings.end_hr
+      );
+    }
+
     this.savePersistent();
     ToastAndroid.show("Settings saved", ToastAndroid.SHORT);
   }
@@ -51,12 +61,15 @@ export class UserStore {
 
   async savePersistent() {
     console.log('savePersistent');
-    AsyncStorage.setItem(this.SESSION_KEY, JSON.stringify({
+    console.log(this.settings);
+    let value = JSON.stringify({
       UserStore: {
         user: this.user,
         settings: this.settings
       }
-    }));
+    });
+    console.log(value);
+    await AsyncStorage.setItem(this.SESSION_KEY, value);
   }
 
   async loadPersistent() {
@@ -64,6 +77,7 @@ export class UserStore {
     const value = await AsyncStorage.getItem(this.SESSION_KEY);
     if (value) {
       console.log("Got session data...")
+      console.log(value);
       alt.bootstrap(value);
     } else console.log("No session");
   }
@@ -71,8 +85,6 @@ export class UserStore {
   getSetting(key) {
     return this.getState().settings[key];
   }
-
-
 
 }
 

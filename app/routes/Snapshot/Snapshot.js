@@ -68,6 +68,7 @@ class Snapshot extends Component {
       if (res.success) {
         this.setState({form: {}});
       }
+      this.props.navigation.navigate('Home');
       ToastAndroid.show(res.message, ToastAndroid.SHORT);
     });
   }
@@ -205,7 +206,7 @@ class Snapshot extends Component {
         <Button
           onPress={this.submit.bind(this)}
           title="Submit"
-          color="#841584"
+          color="#000000"
         />
       </View>
     );

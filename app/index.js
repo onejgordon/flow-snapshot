@@ -16,17 +16,7 @@ class FlowMobile extends Component {
     componentDidMount() {
         UserStore.listen(this.onChange.bind(this));
         UserActions.checkForSession();
-
         notifications.setup(this.navigator);
-
-        let last_scheduled = UserStore.getSetting('last_scheduled_reminder');
-        let rpw = UserStore.getSetting('reminders_per_week');
-        let start_hr = UserStore.getSetting('reminder_start_hr');
-        let end_hr = UserStore.getSetting('reminder_end_hr');
-        console.log([last_scheduled, rpw, start_hr, end_hr]);
-        // TODO: Run in boot receiver too
-        last_scheduled = notifications.schedule_all_reminders_for_week(rpw, last_scheduled, start_hr, end_hr);
-        if (last_scheduled) UserActions.updateUserSetting({'last_scheduled_reminder': last_scheduled});
     }
 
     componentWillUnmount() {
