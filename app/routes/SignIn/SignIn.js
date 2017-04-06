@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import { Text, Image, View, Button } from 'react-native';
+import images from '../../config/images';
 import UserActions from '../../actions/UserActions';
 import secrets from '../../config/secrets';
 
@@ -33,11 +35,19 @@ class SignIn extends Component {
 
     render() {
         return (
-            <GoogleSigninButton
-                style={{width: 250, height: 48}}
-                color={GoogleSigninButton.Color.Light}
-                onPress={this._signIn.bind(this)}/>
-            )
+            <View style={{padding: 10}} style={{justifyContent: 'center', alignItems: 'center'}}>
+
+                <Image source={images.logo}/>
+
+                <Text style={{fontSize: 15, padding: 10}}>Welcome to the Flow Dashboard app!</Text>
+
+                <GoogleSigninButton
+                    style={{width: 250, height: 48}}
+                    color={GoogleSigninButton.Color.Light}
+                    onPress={this._signIn.bind(this)}/>
+
+            </View>
+        );
     }
 }
 

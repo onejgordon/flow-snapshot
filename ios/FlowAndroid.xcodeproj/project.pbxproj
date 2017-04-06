@@ -40,6 +40,7 @@
 		2B56B69B86854E12B0ACD6E1 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DFC931F9845B9A96A3C17 /* SafariServices.framework */; };
 		0345E9F65C024848B8F30298 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AC79675584F416E9B9BFE7C /* SystemConfiguration.framework */; };
 		ED2116A6576D457AAC914FE6 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48F391266756448CA50D3D9D /* AddressBook.framework */; };
+		0DEB9A87E958420CB9336FDA /* libRCTAutoComplete.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A7E4F7170C4FFE84D750B8 /* libRCTAutoComplete.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -265,6 +266,8 @@
 		054DFC931F9845B9A96A3C17 /* SafariServices.framework */ = {isa = PBXFileReference; name = "SafariServices.framework"; path = "System/Library/Frameworks/SafariServices.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		6AC79675584F416E9B9BFE7C /* SystemConfiguration.framework */ = {isa = PBXFileReference; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		48F391266756448CA50D3D9D /* AddressBook.framework */ = {isa = PBXFileReference; name = "AddressBook.framework"; path = "System/Library/Frameworks/AddressBook.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
+		96ECE4F3E4E346418E9AA851 /* RCTAutoComplete.xcodeproj */ = {isa = PBXFileReference; name = "RCTAutoComplete.xcodeproj"; path = "../node_modules/react-native-autocomplete/RCTAutoComplete.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		A5A7E4F7170C4FFE84D750B8 /* libRCTAutoComplete.a */ = {isa = PBXFileReference; name = "libRCTAutoComplete.a"; path = "libRCTAutoComplete.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,6 +299,7 @@
 				2B56B69B86854E12B0ACD6E1 /* SafariServices.framework in Frameworks */,
 				0345E9F65C024848B8F30298 /* SystemConfiguration.framework in Frameworks */,
 				ED2116A6576D457AAC914FE6 /* AddressBook.framework in Frameworks */,
+				0DEB9A87E958420CB9336FDA /* libRCTAutoComplete.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +467,7 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				F3112C58786844B69CED4F8D /* RNGoogleSignin.xcodeproj */,
+				96ECE4F3E4E346418E9AA851 /* RCTAutoComplete.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1004,10 +1009,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
+					"$(SRCROOT)/../node_modules/react-native-autocomplete/**",
 				);
 			};
 			name = Debug;
@@ -1029,10 +1036,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
+					"$(SRCROOT)/../node_modules/react-native-autocomplete/**",
 				);
 			};
 			name = Release;
@@ -1055,6 +1064,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
+					"$(SRCROOT)/../node_modules/react-native-autocomplete/**",
 				);
 			};
 			name = Debug;
@@ -1076,6 +1086,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
+					"$(SRCROOT)/../node_modules/react-native-autocomplete/**",
 				);
 			};
 			name = Release;
@@ -1106,10 +1117,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
+					"$(SRCROOT)/../node_modules/react-native-autocomplete/**",
 				);
 			};
 			name = Debug;
@@ -1140,10 +1153,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
+					"$(SRCROOT)/../node_modules/react-native-autocomplete/**",
 				);
 			};
 			name = Release;
@@ -1169,6 +1184,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1193,6 +1209,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};

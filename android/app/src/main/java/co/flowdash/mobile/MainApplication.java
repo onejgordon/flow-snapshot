@@ -4,6 +4,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import co.flowdash.mobile.BuildConfig;
 
 import com.facebook.react.ReactNativeHost;
