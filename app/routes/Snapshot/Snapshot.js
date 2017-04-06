@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import AutoComplete from 'react-native-autocomplete';
 import { Text, TextInput, Picker, Button, View, Slider,
-  TouchableOpacity, ToastAndroid,
+  TouchableOpacity, ToastAndroid, ListView,
   StyleSheet } from 'react-native';
+import Toolbar from '../../components/Toolbar';
 import constants from '../../config/constants';
 import api from '../../util/api';
 import notifications from '../../util/notifications';
+
 
 class Snapshot extends Component {
   static navigationOptions = {
@@ -20,6 +22,7 @@ class Snapshot extends Component {
       where: '',
       activity: '',
       people: [],
+      people_ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
       form: {
         people: ''
       },
@@ -68,6 +71,12 @@ class Snapshot extends Component {
       if (res.success) {
         this.setState({form: {}});
       }
+      let sett = screenProps.settings;
+      notifications.schedule_all_reminders_for_week(
+        sett.reminders_per_week,
+        sett.start_hr,
+        sett.end_hr
+      );
       this.props.navigation.navigate('Home');
       ToastAndroid.show(res.message, ToastAndroid.SHORT);
     });
@@ -78,9 +87,14 @@ class Snapshot extends Component {
   }
 
   add_person(name) {
-    let {people} = this.state;
-    if (people.indexOf(name) == -1) people.push(name);
-    this.setState({people});
+    let {people_ds, people} = this.state;
+    if (people_ds.indexOf(name) == -1) people_ds.push(name);
+    console.log(`Add ${name}`);
+    people = people.concat([name]);
+    this.setState({
+      people_ds: this.state.people_ds.cloneWithRows(people),
+      people: people
+    });
   }
 
   rating_change(key, value) {
@@ -167,7 +181,15 @@ class Snapshot extends Component {
   }
 
   render_people() {
-    return this.render_selection_question('people', "Who are you with?", this.add_person.bind(this), true)
+    return (
+      <View>
+        <ListView
+            dataSource={this.state.people_ds}
+            renderRow={(p) => <Text>{p}</Text>}
+          />
+        { this.render_selection_question('people', "Who are you with?", this.add_person.bind(this), true) }
+      </View>
+    );
   }
 
   render_rating() {
@@ -196,18 +218,23 @@ class Snapshot extends Component {
 
   render() {
     return (
-      <View style={{padding: 15}}>
+      <View>
 
-        { this.render_where() }
-        { this.render_activity() }
-        { this.render_people() }
-        { this.render_rating() }
+        <Toolbar navigation={this.props.navigation} />
 
-        <Button
-          onPress={this.submit.bind(this)}
-          title="Submit"
-          color="#000000"
-        />
+        <View style={{padding: 15}}>
+
+          { this.render_where() }
+          { this.render_activity() }
+          { this.render_people() }
+          { this.render_rating() }
+
+          <Button
+            onPress={this.submit.bind(this)}
+            title="Submit"
+            color="#000000"
+          />
+        </View>
       </View>
     );
   }

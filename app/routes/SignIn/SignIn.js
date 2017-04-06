@@ -39,7 +39,7 @@ class SignIn extends Component {
 
                 <Image source={images.logo}/>
 
-                <Text style={{fontSize: 15, padding: 10}}>Welcome to the Flow Dashboard app!</Text>
+                <Text style={{fontSize: 25, padding: 10}}>Welcome to Flow Snapshot!</Text>
 
                 <GoogleSigninButton
                     style={{width: 250, height: 48}}
