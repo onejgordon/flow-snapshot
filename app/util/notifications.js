@@ -6,7 +6,8 @@ import util from './util';
 const notifications = {
 
 	setup: (nav) => {
-
+		console.log('setup');
+		console.log(nav);
 		PushNotification.configure({
 
 		    // (optional) Called when Token is generated (iOS and Android)

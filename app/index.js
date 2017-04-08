@@ -17,12 +17,17 @@ class FlowMobile extends Component {
     componentDidMount() {
         UserStore.listen(this.onChange.bind(this));
         UserActions.checkForSession();
-        notifications.setup(this.navigator);
     }
 
     componentWillUnmount() {
         UserStore.unlisten(this.onChange.bind(this));
         UserActions.saveSession();
+    }
+
+    nav_mounted(nav) {
+        console.log('nav_mounted');
+        this.navigator = nav;
+        notifications.setup(this.navigator);
     }
 
     onChange(state) {
@@ -35,7 +40,7 @@ class FlowMobile extends Component {
     render() {
         if (this.state.user !== null) {
             let sp = {user: this.state.user, settings: this.state.settings};
-            return <LoggedIn ref={nav => { this.navigator = nav; }} screenProps={sp} />
+            return <LoggedIn ref={this.nav_mounted.bind(this)} screenProps={sp} />
         }
         return <LoggedOut />;
     }

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import AutoComplete from 'react-native-autocomplete';
 import { Text, TextInput, Picker, Button, View, Slider,
   TouchableOpacity, ToastAndroid, ListView,
-  StyleSheet } from 'react-native';
+  StyleSheet, ScrollView } from 'react-native';
 import Toolbar from '../../components/Toolbar';
 import constants from '../../config/constants';
 import api from '../../util/api';
@@ -26,10 +25,12 @@ class Snapshot extends Component {
       form: {
         people: ''
       },
-      position: null
+      position: null,
+      submitting: false
     };
     this.watchID = null;
     this.USE_AUTOCOMPLETE = false;
+    this.SELECT_PH_VALUE = "Select one...";
   }
 
   componentDidMount() {
@@ -67,18 +68,23 @@ class Snapshot extends Component {
       params.lat = position.coords.latitude;
       params.lon = position.coords.longitude;
     }
-    api.post(screenProps.user, screenProps.settings.api_pw, '/api/snapshot', params, (res) => {
-      if (res.success) {
-        this.setState({form: {}});
-      }
-      let sett = screenProps.settings;
-      notifications.schedule_all_reminders_for_week(
-        sett.reminders_per_week,
-        sett.start_hr,
-        sett.end_hr
-      );
-      this.props.navigation.navigate('Home');
-      ToastAndroid.show(res.message, ToastAndroid.SHORT);
+    this.setState({submitting: true}, () => {
+      api.post(screenProps.user, screenProps.settings.api_pw, '/api/snapshot', params, (res) => {
+        let st = {submitting: false};
+        if (res.success) {
+          st.form = {};
+        }
+        this.setState(st);
+        let sett = screenProps.settings;
+        notifications.schedule_all_reminders_for_week(
+          sett.reminders_per_week,
+          sett.start_hr,
+          sett.end_hr
+        );
+        this.props.navigation.navigate('Home');
+        ToastAndroid.show(res.message, ToastAndroid.SHORT);
+      });
+
     });
   }
 
@@ -88,9 +94,9 @@ class Snapshot extends Component {
 
   add_person(name) {
     let {people_ds, people} = this.state;
-    if (people_ds.indexOf(name) == -1) people_ds.push(name);
-    console.log(`Add ${name}`);
-    people = people.concat([name]);
+    if (name == this.SELECT_PH_VALUE) return;
+    console.log(`Add person ${name}`);
+    if (people.indexOf(name) == -1) people = people.concat([name]);
     this.setState({
       people_ds: this.state.people_ds.cloneWithRows(people),
       people: people
@@ -106,7 +112,7 @@ class Snapshot extends Component {
   get_suggestions(key, query) {
     let std_suggestions = [];
     if (key == 'where') std_suggestions = ['Home', 'Office', 'Restaurant', 'Store', 'Friend\'s House'];
-    else if (key == 'people') std_suggestions = ["By Myself"];
+    else if (key == 'people') std_suggestions = ["By Myself", "In Public"];
     else if (key == 'activity') std_suggestions = [
       'Working',
       'Meeting',
@@ -118,36 +124,43 @@ class Snapshot extends Component {
     ];
     // TODO: Add query of local db
     let queried_suggestions = []
-    return std_suggestions.concat(queried_suggestions);
+    let suggestions = std_suggestions.concat(queried_suggestions);
+    suggestions.splice(0, 0, this.SELECT_PH_VALUE);
+    return suggestions
   }
 
   render_selection_question(key, qtext, handle_choice, _multi) {
     let multi = _multi == null ? false : _multi;
     const { form } = this.state;
     let suggestions = this.get_suggestions(key, form[key]);
-    let content;
+    let content, _text_input;
     let text_value = multi ? this.state[key].join(', ') : this.state[key]||'';
-    if (this.USE_AUTOCOMPLETE) content = (
-      <AutoComplete
-        style={styles.autocomplete}
-        suggestions={suggestions}
-        placeholder="Start typing..."
-        clearButtonMode="always"
-        returnKeyType="go"
-        textAlign="start"
-        onTyping={this.onTyping.bind(this)}
-        onSelect={handle_choice.bind(this)} />
-    )
-    else content = (
+    if (!multi) _text_input = (
+      <TextInput
+        style={{height: 40}}
+        placeholder="Enter response"
+        value={text_value}
+        onChangeText={handle_choice}
+      />
+    );
+    // if (this.USE_AUTOCOMPLETE) content = (
+    //   <AutoComplete
+    //     style={styles.autocomplete}
+    //     suggestions={suggestions}
+    //     placeholder="Start typing..."
+    //     clearButtonMode="always"
+    //     returnKeyType="go"
+    //     textAlign="start"
+    //     onTyping={this.onTyping.bind(this)}
+    //     onSelect={handle_choice.bind(this)} />
+    // )
+    content = (
       <View>
-        <TextInput
-          style={{height: 40}}
-          placeholder="Enter response"
-          value={text_value}
-          onChangeText={handle_choice.bind(this)}
-        />
+        { _text_input }
         <Picker
-          onValueChange={handle_choice.bind(this)}>
+          prompt={qtext}
+          selectedValue={this.SELECT_PH_VALUE}
+          onValueChange={handle_choice}>
           { suggestions.map((sugg) => {
             return <Picker.Item key={sugg} label={sugg} value={sugg} />
           })}
@@ -165,15 +178,27 @@ class Snapshot extends Component {
   }
 
   set_activity(activity) {
+    if (activity == this.SELECT_PH_VALUE) return;
+    console.log('activity -> ' + activity);
     this.setState({activity: activity});
   }
 
   set_where(where) {
+    if (where == this.SELECT_PH_VALUE) return;
+    console.log('where -> ' + where);
     this.setState({where: where});
   }
 
   render_where() {
-    return this.render_selection_question('where', "Where are you?", this.set_where.bind(this))
+    let {position} = this.state;
+    let position_text = "--";
+    if (position) position_text = position.coords.latitude + ", " + position.coords.longitude;
+    return (
+      <View>
+        <Text>{ position_text }</Text>
+        { this.render_selection_question('where', "Where are you?", this.set_where.bind(this)) }
+      </View>
+    );
   }
 
   render_activity() {
@@ -183,9 +208,10 @@ class Snapshot extends Component {
   render_people() {
     return (
       <View>
+        <Text style={styles.h2}>People</Text>
         <ListView
             dataSource={this.state.people_ds}
-            renderRow={(p) => <Text>{p}</Text>}
+            renderRow={(p) => <Text style={styles.person_li}>{p}</Text>}
           />
         { this.render_selection_question('people', "Who are you with?", this.add_person.bind(this), true) }
       </View>
@@ -217,24 +243,29 @@ class Snapshot extends Component {
   }
 
   render() {
+    let {submitting} = this.state;
     return (
-      <View>
+      <View style={{flex: 1}}>
 
         <Toolbar navigation={this.props.navigation} />
 
-        <View style={{padding: 15}}>
+        <ScrollView style={{padding: 15}}>
 
           { this.render_where() }
           { this.render_activity() }
           { this.render_people() }
           { this.render_rating() }
 
+          <View style={{marginBottom: 30}}>
           <Button
+            disabled={submitting}
             onPress={this.submit.bind(this)}
             title="Submit"
             color="#000000"
           />
-        </View>
+          </View>
+
+        </ScrollView>
       </View>
     );
   }
@@ -248,6 +279,9 @@ const styles = StyleSheet.create({
   slider: {
     marginTop: 8,
     marginBottom: 8
+  },
+  h2: {
+    fontSize: 18
   },
   baseText: {
     fontFamily: 'Cochin',
@@ -263,6 +297,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderColor: 'lightblue',
     borderWidth: 1,
+  },
+  person_li: {
+    padding: 10
   },
 });
 

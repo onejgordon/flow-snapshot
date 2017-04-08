@@ -3,6 +3,8 @@ import { Image, Button, Text, TextInput, View } from 'react-native';
 import UserActions from '../../actions/UserActions';
 import UserStore from '../../stores/UserStore';
 import Toolbar from '../../components/Toolbar';
+import notifications from '../../util/notifications';
+
 
 class Settings extends Component {
   static navigationOptions = {
@@ -123,11 +125,11 @@ class Settings extends Component {
 
             <Button
               onPress={this.signout.bind(this)}
-
               title="Sign Out"
               color="#C1073A"
             />
           </View>
+
         </View>
       </View>
     )
