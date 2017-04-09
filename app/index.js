@@ -25,12 +25,18 @@ class FlowMobile extends Component {
     }
 
     nav_mounted(nav) {
-        console.log('nav_mounted');
-        this.navigator = nav;
-        notifications.setup(this.navigator);
+        if (nav == null) {
+            console.log('LoggedIn unmounted')
+        } else {
+            console.log('LoggedIn mounted')
+            this.navigator = nav;
+            notifications.setup(this.navigator);
+        }
     }
 
     onChange(state) {
+        console.log('onChange');
+        console.log(JSON.stringify(state));
         this.setState({
           user: state.user,
           settings: state.settings

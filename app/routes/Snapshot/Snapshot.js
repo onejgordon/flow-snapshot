@@ -18,7 +18,7 @@ class Snapshot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      where: '',
+      place: '',
       activity: '',
       people: [],
       people_ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -57,7 +57,7 @@ class Snapshot extends Component {
     let {form, position} = this.state;
     let params = {
       activity: this.state.activity,
-      where: this.state.where,
+      place: this.state.place,
       people: this.state.people.join(','),
       metrics: JSON.stringify({
         stress: form.stress,
@@ -111,7 +111,7 @@ class Snapshot extends Component {
 
   get_suggestions(key, query) {
     let std_suggestions = [];
-    if (key == 'where') std_suggestions = ['Home', 'Office', 'Restaurant', 'Store', 'Friend\'s House'];
+    if (key == 'place') std_suggestions = ['Home', 'Office', 'Restaurant', 'Store', 'Friend\'s House'];
     else if (key == 'people') std_suggestions = ["By Myself", "In Public"];
     else if (key == 'activity') std_suggestions = [
       'Working',
@@ -183,20 +183,20 @@ class Snapshot extends Component {
     this.setState({activity: activity});
   }
 
-  set_where(where) {
-    if (where == this.SELECT_PH_VALUE) return;
-    console.log('where -> ' + where);
-    this.setState({where: where});
+  set_place(place) {
+    if (place == this.SELECT_PH_VALUE) return;
+    console.log('place -> ' + place);
+    this.setState({place: place});
   }
 
-  render_where() {
+  render_place() {
     let {position} = this.state;
     let position_text = "--";
     if (position) position_text = position.coords.latitude + ", " + position.coords.longitude;
     return (
       <View>
         <Text>{ position_text }</Text>
-        { this.render_selection_question('where', "Where are you?", this.set_where.bind(this)) }
+        { this.render_selection_question('place', "Where are you?", this.set_place.bind(this)) }
       </View>
     );
   }
@@ -251,7 +251,7 @@ class Snapshot extends Component {
 
         <ScrollView style={{padding: 15}}>
 
-          { this.render_where() }
+          { this.render_place() }
           { this.render_activity() }
           { this.render_people() }
           { this.render_rating() }

@@ -12,7 +12,7 @@ class Home extends Component {
   render() {
     let st = {
       padding: 10,
-      backgroundColor: "#EFEFEF",
+      backgroundColor: "#333333",
       flex: 1,
       justifyContent: 'center',
       flexDirection: 'column',
@@ -20,7 +20,6 @@ class Home extends Component {
     };
   	return (
 	    <View style={st}>
-        <Toolbar navigation={this.props.navigation} />
         <TouchableOpacity onPress={this.props.navigation.navigate.bind(this, 'DrawerOpen')} >
           <Image source={images.logo}/>
         </TouchableOpacity>

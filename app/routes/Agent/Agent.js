@@ -24,7 +24,8 @@ class Agent extends Component {
       }),
       form: {
         message: ''
-      }
+      },
+      sending: false
     };
   }
 
@@ -52,7 +53,8 @@ class Agent extends Component {
     this.setState({
       messages: new_messages,
       messageDs: this.state.messageDs.cloneWithRows(new_messages),
-      form: {message: ''}
+      form: {message: ''},
+      sending: false
     });
   }
 
@@ -62,7 +64,7 @@ class Agent extends Component {
       ts: new Date().getTime(),
       dir: 'out'
     }
-    this.setState({messages: this.state.messages.concat(message)}, cb);
+    this.setState({messages: this.state.messages.concat(message), sending: true}, cb);
   }
 
   send() {
@@ -75,7 +77,10 @@ class Agent extends Component {
       api.post(screenProps.user, screenProps.settings.api_pw, '/api/agent/flowapp/request', params, (res) => {
         if (res.success && res.reply) {
           this.add_reply(res.reply);
-        } else ToastAndroid.show("Something odd happened", ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show("Something odd happened", ToastAndroid.SHORT);
+          this.setState({sending: false});
+        }
       });
     });
   }
@@ -105,7 +110,7 @@ class Agent extends Component {
   }
 
   render() {
-    let {form} = this.state;
+    let {form, sending} = this.state;
     return (
       <View>
 
@@ -125,6 +130,7 @@ class Agent extends Component {
             onPress={this.send.bind(this)}
             title="Send"
             color="#000000"
+            disabled={sending}
           />
         </ScrollView>
       </View>

@@ -22,7 +22,8 @@ class Toolbar extends Component {
 		return (
 			<View>
 		        <ToolbarAndroid
-		              logo={require('../images/logo.png')}
+		        	  titleColor='#ffffff'
+		              logo={require('../images/logo_white.png')}
 		              title="Flow Snapshot"
 		              style={styles.toolbar}
 		              actions={actions}
