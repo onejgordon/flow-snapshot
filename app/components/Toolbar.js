@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import { ToolbarAndroid, View, StyleSheet } from 'react-native';
+import { ToolbarAndroid, View, StyleSheet, Image } from 'react-native';
+
 
 class Toolbar extends Component {
     constructor(props) {
         super(props);
+    }
+
+    open_drawer() {
+    	this.props.navigation.navigate('DrawerOpen');
     }
 
 	onActionSelected(position) {
@@ -24,9 +29,11 @@ class Toolbar extends Component {
 		        <ToolbarAndroid
 		        	  titleColor='#ffffff'
 		              logo={require('../images/logo_white.png')}
+		              navIcon={require('../images/ic_menu.png')}
 		              title="Flow Snapshot"
 		              style={styles.toolbar}
 		              actions={actions}
+		              onIconClicked={this.open_drawer.bind(this)}
 		              onActionSelected={this.onActionSelected.bind(this)} />
             </View>
         )
@@ -36,7 +43,7 @@ class Toolbar extends Component {
 var styles = StyleSheet.create({
   toolbar: {
     backgroundColor: '#86878A',
-    height: 56,
+    height: 56
   },
 });
 

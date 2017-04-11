@@ -14,6 +14,8 @@ const LoggedIn = DrawerNavigator({
   Agent: {screen: Agent},
   Snapshot: {screen: Snapshot},
 }, {
-})
+	drawerWidth: 200,
+}
+)
 
 export default LoggedIn;

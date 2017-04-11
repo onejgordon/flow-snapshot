@@ -3,15 +3,16 @@ import { Text, TextInput, Picker, Button, View, Slider,
   TouchableOpacity, ToastAndroid, ListView,
   StyleSheet, ScrollView } from 'react-native';
 import Toolbar from '../../components/Toolbar';
+import FlowButton from '../../components/FlowButton';
 import constants from '../../config/constants';
 import api from '../../util/api';
 import notifications from '../../util/notifications';
-
+import {colors} from '../../config/styles';
 
 class Agent extends Component {
   static navigationOptions = {
-    tabBar: {
-      label: 'Agent',
+    drawer: {
+      label: 'Talk to Flow'
     }
   }
 
@@ -118,6 +119,8 @@ class Agent extends Component {
 
         <ScrollView style={{padding: 15}}>
 
+          <Text style={{fontSize: 30}}>Talk to Flow</Text>
+
           { this.render_conversation() }
 
           <TextInput
@@ -126,10 +129,9 @@ class Agent extends Component {
             onSubmitEditing={this.send.bind(this)}
             onChangeText={this.change_text.bind(this)} value={form.message} />
 
-          <Button
+          <FlowButton
             onPress={this.send.bind(this)}
             title="Send"
-            color="#000000"
             disabled={sending}
           />
         </ScrollView>

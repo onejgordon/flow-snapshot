@@ -75,6 +75,8 @@ class Settings extends Component {
 
         <View style={{padding: 10}}>
 
+          <Text style={{fontSize: 30}}>Settings</Text>
+
           <Text>How many times a week do you want to answer the question?</Text>
 
           <TextInput

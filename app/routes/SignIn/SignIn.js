@@ -4,6 +4,7 @@ import { Text, Image, View, Button } from 'react-native';
 import images from '../../config/images';
 import UserActions from '../../actions/UserActions';
 import secrets from '../../config/secrets';
+import {colors} from '../../config/styles';
 
 class SignIn extends Component {
     static navigationOptions = {
@@ -35,11 +36,11 @@ class SignIn extends Component {
 
     render() {
         return (
-            <View style={{padding: 10}} style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View flex={1} style={{justifyContent: 'center', alignItems: 'center', padding: 10, backgroundColor: colors.background}}>
 
                 <Image source={images.logo}/>
 
-                <Text style={{fontSize: 25, padding: 10}}>Welcome to Flow Snapshot!</Text>
+                <Text style={{fontSize: 25, padding: 10, color: 'white'}}>Welcome to Flow Snapshot!</Text>
 
                 <GoogleSigninButton
                     style={{width: 250, height: 48}}
