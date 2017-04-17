@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import images from '../../config/images';
 import Toolbar from '../../components/Toolbar';
+import notifications from '../../util/notifications';
 import {colors} from '../../config/styles';
 
 class Home extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    notifications.setup(this.props.navigator);
   }
 
   render() {

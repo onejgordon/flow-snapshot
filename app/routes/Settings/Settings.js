@@ -59,6 +59,11 @@ class Settings extends Component {
     this.setState({form});
   }
 
+  clear_suggestions() {
+    let {screenProps} = this.props;
+    UserActions.clearSuggestions(screenProps.user);
+  }
+
   signout() {
     UserActions.userSignout();
   }
@@ -128,6 +133,15 @@ class Settings extends Component {
             <Button
               onPress={this.signout.bind(this)}
               title="Sign Out"
+              color="#C1073A"
+            />
+          </View>
+
+          <View style={{marginTop: 30}}>
+
+            <Button
+              onPress={this.clear_suggestions.bind(this)}
+              title="Clear All Suggestions"
               color="#C1073A"
             />
           </View>

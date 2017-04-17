@@ -2,6 +2,7 @@ import alt from '../config/alt';
 import UserActions from '../actions/UserActions';
 import {AsyncStorage, ToastAndroid} from 'react-native';
 import notifications from '../util/notifications';
+import constants from '../config/constants';
 
 class UserStore {
 
@@ -9,18 +10,38 @@ class UserStore {
     this.bindActions(UserActions);
     this.user = null;
     this.settings = {};
+    this.suggestions = {}; // {people: [], places: [], activities: []}
     this.errorMessage = null;
 
     // this.bindListeners({
     //   handleUpdateUser: UserActions.UPDATE_USER
     // });
-    this.exportPublicMethods({
-      getSetting: this.getSetting
-    });
-    this.SESSION_KEY = '@FlowStore:session';
+    // this.exportPublicMethods({
+    //   getSetting: this.getSetting,
+    //   suggestionStoreKey: this.suggestionStoreKey
+    // });
+
+  }
+
+  onSetSuggestion(payload) {
+    if (payload.key && payload.value) {
+      if (!this.suggestions[payload.key]) this.suggestions[payload.key] = {};
+      this.suggestions[payload.key][payload.value] = 1;
+    }
+  }
+
+  onClearSuggestions(payload) {
+    this.suggestions = {};
+    ToastAndroid.show("Suggestions cleared", ToastAndroid.SHORT);
+  }
+
+  onGetSuggestions(payload) {
+    console.log("Got suggestions...");
+    this.suggestions = payload;
   }
 
   onUpdateUser(user) {
+    console.log('onUpdateUser');
     this.user = user;
     this.errorMessage = null;
     this.savePersistent();
@@ -49,14 +70,14 @@ class UserStore {
   }
 
   onSaveSession() {
+    console.log('saveSession');
     this.savePersistent();
   }
 
   onUserSignout() {
-    this.savePersistent();
+    console.log('user signout complete')
     this.user = null;
     this.settings = {};
-    ToastAndroid.show("You are signed out", ToastAndroid.SHORT);
   }
 
   async savePersistent() {
@@ -68,13 +89,12 @@ class UserStore {
         settings: this.settings
       }
     });
-    console.log(value);
-    await AsyncStorage.setItem(this.SESSION_KEY, value);
+    AsyncStorage.setItem(constants.SESSION_KEY, value);
   }
 
   async loadPersistent() {
     console.log('loadPersistent');
-    const value = await AsyncStorage.getItem(this.SESSION_KEY);
+    const value = await AsyncStorage.getItem(constants.SESSION_KEY);
     if (value) {
       console.log("Got session data...")
       console.log(value);
@@ -82,10 +102,12 @@ class UserStore {
     } else console.log("No session");
   }
 
-  getSetting(key) {
+  // Public methods
+
+  static getSetting(key) {
     return this.getState().settings[key];
   }
 
 }
 
-export default alt.createStore(UserStore, 'UserStore');
+export default alt.createStore(UserStore)

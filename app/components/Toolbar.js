@@ -33,6 +33,7 @@ class Toolbar extends Component {
 		              title="Flow Snapshot"
 		              style={styles.toolbar}
 		              actions={actions}
+		              contentInsetStart={0}
 		              onIconClicked={this.open_drawer.bind(this)}
 		              onActionSelected={this.onActionSelected.bind(this)} />
             </View>

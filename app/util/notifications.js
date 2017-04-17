@@ -6,8 +6,7 @@ import util from './util';
 const notifications = {
 
 	setup: (nav) => {
-		console.log('setup');
-		console.log(nav);
+		console.log('notifications.setup');
 		PushNotification.configure({
 
 		    // (optional) Called when Token is generated (iOS and Android)
@@ -44,20 +43,6 @@ const notifications = {
 		});
 	},
 
-	start_click_listener: (navigate) => {
-		Notification.addListener('press', function(e) {
-		    switch (e.action) {
-			    case 'SNAPSHOT':
-		            console.log(`Action Triggered! Data: ${e.payload.data}`);
-		            navigate('Snapshot', {});
-			        break;
-		    }
-		});
-	},
-
-	remove_click_listeners: () => {
-	},
-
 	schedule_snapshot: (when) => {
 		console.log("Scheduling notif for " + when);
 		let ts = when.getTime();
@@ -66,7 +51,10 @@ const notifications = {
 			id: id,
 			title: "Snapshot",
 		    message: "Snapshot time", // (required)
-	        date: when
+	        date: when,
+	        vibrate: true,
+	        vibration: 1000,
+	        playSound: true
 		});
 	},
 

@@ -24,29 +24,20 @@ class FlowMobile extends Component {
         UserActions.saveSession();
     }
 
-    nav_mounted(nav) {
-        if (nav == null) {
-            console.log('LoggedIn unmounted')
-        } else {
-            console.log('LoggedIn mounted')
-            this.navigator = nav;
-            notifications.setup(this.navigator);
-        }
-    }
-
     onChange(state) {
-        console.log('onChange');
-        console.log(JSON.stringify(state));
+        console.log('FlowMobile.onChange');
         this.setState({
           user: state.user,
-          settings: state.settings
+          settings: state.settings,
+          suggestions: state.suggestions
         });
     }
 
     render() {
+        console.log(['have user: ', this.state.user !== null]);
         if (this.state.user !== null) {
-            let sp = {user: this.state.user, settings: this.state.settings};
-            return <LoggedIn ref={this.nav_mounted.bind(this)} screenProps={sp} />
+            let sp = {user: this.state.user, settings: this.state.settings, suggestions: this.state.suggestions};
+            return <LoggedIn screenProps={sp} />
         }
         return <LoggedOut />;
     }
