@@ -85,7 +85,7 @@ const notifications = {
 			let min = minute_in % 60;
 			date.setHours(hr);
 			date.setMinutes(min);
-			schedule_times.push(date);
+			if (date > now) schedule_times.push(date);
 		}
 		console.log(schedule_times);
 		schedule_times.forEach((when) => {

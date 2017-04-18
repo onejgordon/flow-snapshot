@@ -9,7 +9,7 @@ class UserActions {
 
   constructor() {
       // Automatic action
-      this.generateActions('updateUserSetting', 'checkForSession', 'saveSession');
+      this.generateActions('updateUserSetting', 'saveSession');
   }
 
   // Helpers
@@ -22,6 +22,15 @@ class UserActions {
   }
 
   // Actions
+
+  loadSession() {
+    return (dispatch) => {
+      AsyncStorage.getItem(constants.SESSION_KEY).then((value) => {
+        if (value != null) dispatch(value);
+        else console.log("No session");
+      });
+    }
+  }
 
   setSuggestion(user, key, value) {
     return (dispatch) => {

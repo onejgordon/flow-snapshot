@@ -65,7 +65,12 @@ class Agent extends Component {
       ts: new Date().getTime(),
       dir: 'out'
     }
-    this.setState({messages: this.state.messages.concat(message), sending: true}, cb);
+    let new_messages = this.state.messages.concat(message);
+    this.setState({
+      messages: new_messages,
+      messageDs: this.state.messageDs.cloneWithRows(new_messages),
+      sending: true
+    }, cb);
   }
 
   send() {

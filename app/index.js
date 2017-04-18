@@ -16,12 +16,11 @@ class FlowMobile extends Component {
 
     componentDidMount() {
         UserStore.listen(this.onChange.bind(this));
-        UserActions.checkForSession();
+        UserActions.loadSession();
     }
 
     componentWillUnmount() {
         UserStore.unlisten(this.onChange.bind(this));
-        UserActions.saveSession();
     }
 
     onChange(state) {

@@ -65,8 +65,10 @@ class UserStore {
     ToastAndroid.show("Settings saved", ToastAndroid.SHORT);
   }
 
-  onCheckForSession() {
-    this.loadPersistent();
+  onLoadSession(payload) {
+    console.log("Got session data...")
+    console.log(payload);
+    alt.bootstrap(payload);
   }
 
   onSaveSession() {
@@ -90,16 +92,6 @@ class UserStore {
       }
     });
     AsyncStorage.setItem(constants.SESSION_KEY, value);
-  }
-
-  async loadPersistent() {
-    console.log('loadPersistent');
-    const value = await AsyncStorage.getItem(constants.SESSION_KEY);
-    if (value) {
-      console.log("Got session data...")
-      console.log(value);
-      alt.bootstrap(value);
-    } else console.log("No session");
   }
 
   // Public methods

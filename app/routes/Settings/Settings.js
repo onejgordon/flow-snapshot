@@ -87,6 +87,7 @@ class Settings extends Component {
           <TextInput
             style={{height: 40}}
             value={form.reminders_per_week || ''}
+            keyboardType='numeric'
             placeholder="How many times a week do you want to answer the question?"
             onChangeText={this.handle_change.bind(this, 'reminders_per_week')}
           />
