@@ -44,11 +44,13 @@ class UserStore {
     console.log('onUpdateUser');
     this.user = user;
     this.errorMessage = null;
-    this.savePersistent();
   }
 
   onUpdateUserSetting(payload) {
+    console.log('onUpdateUserSetting');
+    console.log(payload)
     let reschedule = false;
+    if (this.settings == null) this.settings = {};
     Object.keys(payload).forEach((k) => {
       this.settings[k] = payload[k];
       if (['start_hr', 'end_hr', 'reminders_per_week'].indexOf(k) > -1) reschedule = true;
@@ -60,38 +62,23 @@ class UserStore {
         this.settings.end_hr
       );
     }
-
-    this.savePersistent();
     ToastAndroid.show("Settings saved", ToastAndroid.SHORT);
   }
 
   onLoadSession(payload) {
     console.log("Got session data...")
     console.log(payload);
-    alt.bootstrap(payload);
-  }
-
-  onSaveSession() {
-    console.log('saveSession');
-    this.savePersistent();
+    let value = JSON.stringify({
+      UserStore: JSON.parse(payload)
+    });
+    alt.bootstrap(value);
   }
 
   onUserSignout() {
     console.log('user signout complete')
     this.user = null;
     this.settings = {};
-  }
-
-  async savePersistent() {
-    console.log('savePersistent');
-    console.log(this.settings);
-    let value = JSON.stringify({
-      UserStore: {
-        user: this.user,
-        settings: this.settings
-      }
-    });
-    AsyncStorage.setItem(constants.SESSION_KEY, value);
+    ToastAndroid.show("You are signed out", ToastAndroid.SHORT);
   }
 
   // Public methods

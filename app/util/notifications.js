@@ -66,26 +66,25 @@ const notifications = {
 	},
 
 	schedule_all_reminders_for_week: (reminders_per_week, _start_hour, _end_hour) => {
+		console.log('schedule_all_reminders_for_week')
 		let start_hour = _start_hour || 8;
 		let end_hour = _end_hour || 23;
 		let now = new Date();
-		let first_day;
 		notifications.cancel_all_scheduled();
-		first_day = new Date(now.getTime());
-		first_day.setDate(first_day.getDate() + 1); // Day after last
 		let start_minute = start_hour * 60;
 		let end_minute = end_hour * 60;
 		let schedule_times = [];
 		for (let i = 0; i < reminders_per_week; i++) {
 			let day_index = parseInt(Math.random() * 6);
 			let minute_in = start_minute + parseInt(Math.random() * (end_minute - start_minute));
-			let date = new Date(first_day.getTime());
+			let date = new Date(now.getTime());
 			date.setDate(date.getDate() + day_index);
 			let hr = parseInt(minute_in / 60);
 			let min = minute_in % 60;
 			date.setHours(hr);
 			date.setMinutes(min);
 			if (date > now) schedule_times.push(date);
+			else console.log('skipping date in past ' + date);
 		}
 		console.log(schedule_times);
 		schedule_times.forEach((when) => {

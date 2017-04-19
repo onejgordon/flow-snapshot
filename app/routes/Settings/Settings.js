@@ -15,7 +15,7 @@ class Settings extends Component {
 
   constructor(props) {
     super(props);
-    let sett = this.props.screenProps.settings;
+    let sett = this.props.screenProps.settings || {};
     this.state = {
       form: {
         reminders_per_week: sett.reminders_per_week || '',
@@ -43,14 +43,15 @@ class Settings extends Component {
   }
 
   storeChange(state) {
-      this.setState({form: state.settings});
+    this.setState({form: state.settings});
   }
 
 
   save() {
     let {form} = this.state;
+    let {screenProps} = this.props;
     console.log('save');
-    UserActions.updateUserSetting(form);
+    UserActions.updateUserSetting(screenProps.user, form);
   }
 
   handle_change(key, val) {

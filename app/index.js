@@ -15,11 +15,13 @@ class FlowMobile extends Component {
     }
 
     componentDidMount() {
+        console.log('FlowMobile.componentDidMount')
         UserStore.listen(this.onChange.bind(this));
         UserActions.loadSession();
     }
 
     componentWillUnmount() {
+        console.log('FlowMobile.componentWillUnmount')
         UserStore.unlisten(this.onChange.bind(this));
     }
 

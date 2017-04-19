@@ -9,7 +9,7 @@ class UserActions {
 
   constructor() {
       // Automatic action
-      this.generateActions('updateUserSetting', 'saveSession');
+      // this.generateActions('saveSession');
   }
 
   // Helpers
@@ -28,6 +28,16 @@ class UserActions {
       AsyncStorage.getItem(constants.SESSION_KEY).then((value) => {
         if (value != null) dispatch(value);
         else console.log("No session");
+      });
+    }
+  }
+
+  updateUserSetting(user, params) {
+    return (dispatch) => {
+      let val = {settings: params};
+      let key = constants.SESSION_KEY;
+      AsyncStorage.mergeItem(key, JSON.stringify(val)).then(() => {
+        dispatch(params);
       });
     }
   }
@@ -68,7 +78,6 @@ class UserActions {
   userSignout() {
     return (dispatch) => {
       AsyncStorage.removeItem(constants.SESSION_KEY).then(() => {
-        ToastAndroid.show("You are signed out", ToastAndroid.SHORT);
         dispatch();
       });
     }
@@ -79,12 +88,16 @@ class UserActions {
     console.log(_user);
     if (_user != null) {
       console.log('returning user...')
+      AsyncStorage.mergeItem(constants.SESSION_KEY, JSON.stringify({user: _user}));
       return _user;
     }
     return (dispatch) => {
       GoogleSignin.currentUserAsync().then((user) => {
         console.log(['USER', user]);
-        dispatch(user);
+        AsyncStorage.mergeItem(constants.SESSION_KEY, JSON.stringify({user: user})).then(() => {
+          console.log('Saved user in session')
+          dispatch(user);
+        });
       });
     }
   }

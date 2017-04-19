@@ -113,7 +113,6 @@ class Snapshot extends Component {
     form[key] = '';
     st[key] = value;
     st.form = form;
-    console.log(key + ' -> ' + value);
     this.setState(st, () => {
       if (manually_entered) {
         // Add to suggestions if not already present
@@ -125,7 +124,6 @@ class Snapshot extends Component {
   add_person(manually_entered, name) {
     let {people_ds, people} = this.state;
     if (name == this.SELECT_PH_VALUE) return;
-    console.log(`Add person ${name}`);
     name = util.title_case(name);
     if (people.indexOf(name) == -1) people = people.concat([name]);
     this.setState({
@@ -180,10 +178,8 @@ class Snapshot extends Component {
     let suggs = screenProps.suggestions;
     let queried_suggestions = []
     if (suggs) {
-      console.log('suggs for ' + key);
       let key_suggs = suggs[key];
       if (key_suggs != null) {
-        console.log(Object.keys(key_suggs));
         queried_suggestions = Object.keys(key_suggs);
       }
     }
