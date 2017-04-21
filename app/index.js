@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AppState, ToastAndroid } from 'react-native';
 import LoggedOut from './layouts/LoggedOut';
 import LoggedIn from './layouts/LoggedIn';
 import settings from './config/settings';
@@ -11,18 +12,35 @@ import notifications from './util/notifications';
 class FlowMobile extends Component {
     constructor(props) {
         super(props);
-        this.state = UserStore.getState();
+        let st = UserStore.getState();
+        st.appState = null;
+        this.state = st;
+    }
+
+    _userSignedIn() {
+        return this.state.user !== null;
+    }
+
+    _handleAppStateChange(nextAppState) {
+        if (this.state.appState == null || this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+            console.log('App has come to the foreground');
+            if (!this._userSignedIn()) {
+                console.log('No user, attempt to load session');
+                UserActions.loadSession();
+            }
+        }
+        this.setState({appState: nextAppState});
     }
 
     componentDidMount() {
-        console.log('FlowMobile.componentDidMount')
         UserStore.listen(this.onChange.bind(this));
+        AppState.addEventListener('change', this._handleAppStateChange.bind(this));
         UserActions.loadSession();
     }
 
     componentWillUnmount() {
-        console.log('FlowMobile.componentWillUnmount')
         UserStore.unlisten(this.onChange.bind(this));
+        AppState.removeEventListener('change', this._handleAppStateChange.bind(this));
     }
 
     onChange(state) {
@@ -36,7 +54,7 @@ class FlowMobile extends Component {
 
     render() {
         console.log(['have user: ', this.state.user !== null]);
-        if (this.state.user !== null) {
+        if (this._userSignedIn()) {
             let sp = {user: this.state.user, settings: this.state.settings, suggestions: this.state.suggestions};
             return <LoggedIn screenProps={sp} />
         }

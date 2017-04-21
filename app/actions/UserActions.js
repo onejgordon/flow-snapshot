@@ -26,8 +26,11 @@ class UserActions {
   loadSession() {
     return (dispatch) => {
       AsyncStorage.getItem(constants.SESSION_KEY).then((value) => {
-        if (value != null) dispatch(value);
-        else console.log("No session");
+        if (value != null) {
+          dispatch(value);
+        } else console.log("No session");
+      }, (err) => {
+        ToastAndroid.show("Error loading session", ToastAndroid.SHORT);
       });
     }
   }

@@ -46,9 +46,8 @@ const notifications = {
 	schedule_snapshot: (when) => {
 		console.log("Scheduling notif for " + when);
 		let ts = when.getTime();
-		let id = (ts - 1491000000000).toString();
 		PushNotification.localNotificationSchedule({
-			id: id,
+			// id: id,
 			title: "Snapshot",
 		    message: "Snapshot time", // (required)
 	        date: when,

@@ -16,6 +16,9 @@ class SignIn extends Component {
         this.state = {};
     }
 
+    componentDidMount() {
+    }
+
     _signIn() {
         GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
             // play services are available. can now configure library

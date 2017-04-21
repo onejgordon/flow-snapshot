@@ -66,12 +66,17 @@ class UserStore {
   }
 
   onLoadSession(payload) {
-    console.log("Got session data...")
-    console.log(payload);
-    let value = JSON.stringify({
-      UserStore: JSON.parse(payload)
-    });
-    alt.bootstrap(value);
+    let keys = [];
+    let data = JSON.parse(payload);
+    if (data.user != null) {
+      this.user = data.user;
+      keys.push('user');
+    }
+    if (data.settings != null) {
+      this.settings = data.settings;
+      keys.push('settings');
+    }
+    ToastAndroid.show("Got session keys... " + keys.join(', '), ToastAndroid.SHORT);
   }
 
   onUserSignout() {
