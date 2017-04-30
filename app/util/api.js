@@ -3,7 +3,7 @@ import util from '../util/util';
 var btoa = require('base-64').encode;
 
 var api = {
-	post(user, pw, url, params, cb) {
+	post(user, pw, url, params, cb, cb_failure) {
 		if (user) {
 			let full_url = constants.flow_base + url;
 			console.log(`POST to ${full_url}`);
@@ -28,6 +28,8 @@ var api = {
 			        if (cb) cb(data);
 			    });
 
+		    }, function(err) {
+		    	cb_failure(err);
 		    });
 		} else console.error("No user");
 	}

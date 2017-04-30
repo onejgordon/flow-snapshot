@@ -28,7 +28,8 @@ class Home extends Component {
     if (screenProps.user) _user_signedin = <View><Text style={{color: 'white', fontSize: 18}}>Signed in as {screenProps.user.email}</Text></View>
   	return (
 	    <View style={st}>
-        <TouchableOpacity onPress={this.props.navigation.navigate.bind(this, 'DrawerOpen')} >
+        <Toolbar navigation={this.props.navigation} />
+        <TouchableOpacity>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Image source={images.logo}/>
           </View>

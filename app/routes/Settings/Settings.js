@@ -8,9 +8,7 @@ import notifications from '../../util/notifications';
 
 class Settings extends Component {
   static navigationOptions = {
-    tabBar: {
-      label: 'Settings',
-    }
+    tabBarLabel: 'Settings'
   }
 
   constructor(props) {

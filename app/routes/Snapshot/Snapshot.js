@@ -9,12 +9,13 @@ import api from '../../util/api';
 import util from '../../util/util';
 import notifications from '../../util/notifications';
 import FlowButton from '../../components/FlowButton';
+import AutoComplete from 'react-native-autocomplete-select';
+import {colors} from '../../config/styles';
+
 
 class Snapshot extends Component {
   static navigationOptions = {
-    tabBar: {
-      label: 'Snapshot',
-    }
+    tabBarLabel: 'Snapshot'
   }
 
   constructor(props) {
@@ -31,7 +32,7 @@ class Snapshot extends Component {
       submitting: false
     };
     this.watchID = null;
-    this.USE_AUTOCOMPLETE = false;
+    this.USE_AUTOCOMPLETE = true;
     this.SELECT_PH_VALUE = "[ Select one... ]";
   }
 
@@ -89,8 +90,10 @@ class Snapshot extends Component {
         );
         this.props.navigation.navigate('Home');
         ToastAndroid.show(res.message, ToastAndroid.SHORT);
+      }, (err) => {
+        ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
+        this.setState({submitting: false});
       });
-
     });
   }
 
@@ -122,17 +125,20 @@ class Snapshot extends Component {
   }
 
   add_person(manually_entered, name) {
-    let {people_ds, people} = this.state;
+    let {people_ds, people, form} = this.state;
+    let {screenProps} = this.props;
     if (name == this.SELECT_PH_VALUE) return;
     name = util.title_case(name);
     if (people.indexOf(name) == -1) people = people.concat([name]);
+    form.people = '';
     this.setState({
       people_ds: this.state.people_ds.cloneWithRows(people),
-      people: people
+      people: people,
+      form: form
     }, () => {
       if (manually_entered) {
         // Add to suggestions if not already present
-        UserActions.setSuggestion({key: 'people', value: name});
+        UserActions.setSuggestion(screenProps.user, 'people', name);
       }
     });
   }
@@ -150,11 +156,6 @@ class Snapshot extends Component {
     }
   }
 
-  add_entered_person(name) {
-    let {form} = this.state;
-    this.add_person(form.people);
-  }
-
   rating_change(key, value) {
     let {form} = this.state;
     form[key] = value;
@@ -164,11 +165,11 @@ class Snapshot extends Component {
   get_suggestions(key, query) {
     let {screenProps} = this.props;
     let std_suggestions = [];
-    if (key == 'place') std_suggestions = ['Home', 'Office', 'Restaurant', 'Store', 'Friend\'s House'];
+    if (key == 'place') std_suggestions = ['Home', 'Office', 'Restaurant', 'Store', 'Friend\'s House', 'Transit', 'Outside'];
     else if (key == 'people') std_suggestions = ["By Myself", "In Public", "Coworkers"];
     else if (key == 'activity') std_suggestions = [
       'Working',
-      'Meeting',
+      'Working - Meeting',
       'On a Call',
       'Shopping',
       'Reading',
@@ -216,12 +217,35 @@ class Snapshot extends Component {
         </View>
         )
     }
-    return (
-      <View style={styles.question}>
-        <Text style={styles.qText}>{ qtext }</Text>
-        <View>
+    let _selector;
+    if (this.USE_AUTOCOMPLETE) {
+      _selector = (
+          <View flexDirection="row">
+            <View flex={2}>
+              <AutoComplete
+                onSelect={handle_choice.bind(this, false)}
+                suggestions={suggestions}
+                onChangeText={this.change_form_input.bind(this, key)}
+                suggestionStyle={styles.suggestionStyle}
+                suggestionTextStyle={styles.suggestionTextStyle}
+                suggestionWrapperStyle={styles.suggestionWrapperStyle}
+                inputStyle={styles.ac_input}
+                value={form[key]}
+              />
+            </View>
 
-          { _value_section }
+            <View flex={1}>
+              <FlowButton
+                onPress={handle_choice.bind(this, true, form[key])}
+                onTouchTap={handle_choice.bind(this, true, form[key])}
+                title="Set"
+              />
+            </View>
+          </View>
+        )
+    } else {
+      _selector = (
+        <View>
 
           <View flexDirection="row">
             <View flex={2}>
@@ -236,6 +260,7 @@ class Snapshot extends Component {
             <View flex={1}>
               <FlowButton
                 onPress={handle_choice.bind(this, true, form[key])}
+                onTouchTap={handle_choice.bind(this, true, form[key])}
                 title="Set"
               />
             </View>
@@ -249,6 +274,16 @@ class Snapshot extends Component {
               return <Picker.Item key={sugg} label={sugg} value={sugg} />
             })}
           </Picker>
+
+        </View>
+      );
+    }
+    return (
+      <View style={styles.question}>
+        <Text style={styles.qText}>{ qtext }</Text>
+        <View>
+          { _value_section }
+          { _selector }
         </View>
       </View>
     );
@@ -260,7 +295,7 @@ class Snapshot extends Component {
     if (position) position_text = position.coords.latitude + ", " + position.coords.longitude;
     return (
       <View>
-        <Text>{ position_text }</Text>
+        <Text style={styles.location}>{ position_text }</Text>
         { this.render_selection_question('place', "Where are you?", this.handle_set_button.bind(this, 'place', false)) }
       </View>
     );
@@ -283,18 +318,26 @@ class Snapshot extends Component {
     return (
       <View>
         <Text style={styles.qText}>Happiness</Text>
-        <View style={styles.slider}>
+        <View style={styles.slider_holder}>
           <Slider
             maximumValue={10}
             minimumValue={1}
+            thumbTintColor="#F5495E"
+            maximumTrackTintColor='#F5495E'
+            minimumTrackTintColor='#F5495E'
+            style={styles.slider}
             value={form.happiness || 1}
             onValueChange={this.rating_change.bind(this, 'happiness')} />
         </View>
         <Text style={styles.qText}>Stress</Text>
-        <View style={styles.slider}>
+        <View style={styles.slider_holder}>
           <Slider
             maximumValue={10}
             minimumValue={1}
+            thumbTintColor="#F5495E"
+            maximumTrackTintColor='#F5495E'
+            minimumTrackTintColor='#F5495E'
+            style={styles.slider}
             value={form.stress || 1}
             onValueChange={this.rating_change.bind(this, 'stress')} />
         </View>
@@ -305,26 +348,28 @@ class Snapshot extends Component {
   render() {
     let {submitting} = this.state;
     return (
-      <View style={{flex: 1}}>
+      <View>
 
         <Toolbar navigation={this.props.navigation} />
 
-        <ScrollView style={{padding: 15}}>
+        <View style={styles.frame}>
+          <ScrollView>
 
-          { this.render_place() }
-          { this.render_activity() }
-          { this.render_people() }
-          { this.render_rating() }
+            { this.render_place() }
+            { this.render_activity() }
+            { this.render_people() }
+            { this.render_rating() }
 
-          <View style={{marginBottom: 30}}>
-            <FlowButton
-              disabled={submitting}
-              onPress={this.submit.bind(this)}
-              title="Submit"
-            />
-          </View>
+            <View style={{marginBottom: 30}}>
+              <FlowButton
+                disabled={submitting}
+                onPress={this.submit.bind(this)}
+                title="Submit"
+              />
+            </View>
 
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -332,12 +377,23 @@ class Snapshot extends Component {
 
 
 const styles = StyleSheet.create({
-  question: {
-    margin: 5
+  ac_input: {
+    borderBottomColor: "#FFF",
   },
-  slider: {
+  frame: {
+    padding: 10,
+    backgroundColor: colors.background,
+  },
+  question: {
+    margin: 5,
+  },
+  slider_holder: {
     marginTop: 8,
     marginBottom: 8
+  },
+  slider: {
+    marginTop: 13,
+    marginBottom: 13
   },
   h2: {
     fontSize: 18
@@ -346,12 +402,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#F5495E'
   },
+  location: {
+    textAlign: 'center',
+    color: '#ffffff'
+  },
   baseText: {
     fontFamily: 'Cochin',
+    color: '#ffffff'
   },
   qText: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: '#FFFFFF'
   },
   autocomplete: {
     alignSelf: 'stretch',
@@ -366,6 +428,19 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#F5495E'
   },
+  suggestionStyle: {
+    height: 30,
+    padding: 5,
+    borderBottomColor: '#ddd',
+    borderBottomWidth: 1
+  },
+  suggestionWrapperStyle: {
+    borderColor: '#fff',
+    borderWidth: 1
+  },
+  suggestionTextStyle: {
+    color: '#FFF'
+  }
 });
 
 Snapshot.propTypes = {

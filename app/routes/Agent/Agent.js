@@ -69,7 +69,8 @@ class Agent extends Component {
     this.setState({
       messages: new_messages,
       messageDs: this.state.messageDs.cloneWithRows(new_messages),
-      sending: true
+      sending: true,
+      form: {message: ''}
     }, cb);
   }
 

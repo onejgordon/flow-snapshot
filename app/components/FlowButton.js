@@ -7,7 +7,7 @@ class FlowButton extends Component {
     }
 
 	render() {
-		return <Button color="#000000" style={styles.button} {...this.props} />
+		return <Button color="#C22968" style={styles.button} {...this.props} />
 	}
 }
 
