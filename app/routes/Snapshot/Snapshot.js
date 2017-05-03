@@ -348,12 +348,12 @@ class Snapshot extends Component {
   render() {
     let {submitting} = this.state;
     return (
-      <View>
+      <View flex={1}>
 
         <Toolbar navigation={this.props.navigation} />
 
-        <View style={styles.frame}>
-          <ScrollView>
+        <View style={styles.frame} flex={1}>
+          <ScrollView keyboardShouldPersistTaps='always'>
 
             { this.render_place() }
             { this.render_activity() }
@@ -379,6 +379,8 @@ class Snapshot extends Component {
 const styles = StyleSheet.create({
   ac_input: {
     borderBottomColor: "#FFF",
+    textDecorationColor: "#FFF",
+    color: "#FFF"
   },
   frame: {
     padding: 10,

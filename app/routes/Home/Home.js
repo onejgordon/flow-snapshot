@@ -16,24 +16,21 @@ class Home extends Component {
 
   render() {
     let st = {
-      padding: 10,
       backgroundColor: colors.background,
-      flex: 1,
-      justifyContent: 'center',
-      flexDirection: 'column',
-      alignItems: 'center'
+      flex: 1
     };
     let {screenProps} = this.props;
     let _user_signedin;
-    if (screenProps.user) _user_signedin = <View><Text style={{color: 'white', fontSize: 18}}>Signed in as {screenProps.user.email}</Text></View>
+    if (screenProps.user) _user_signedin = <View><Text style={{color: 'white', fontSize: 18, justifyContent: 'center'}}>Signed in as {screenProps.user.email}</Text></View>
   	return (
 	    <View style={st}>
         <Toolbar navigation={this.props.navigation} />
-        <TouchableOpacity>
+
+        <TouchableOpacity style={{padding: 10, marginTop: 50}}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Image source={images.logo}/>
+            { _user_signedin }
           </View>
-          { _user_signedin }
         </TouchableOpacity>
 	    </View>
 	  );
