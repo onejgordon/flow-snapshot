@@ -11,7 +11,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    notifications.setup(this.props.navigator);
+    notifications.setup(this.props.navigation);
   }
 
   render() {

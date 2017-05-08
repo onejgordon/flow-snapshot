@@ -81,17 +81,17 @@ class Settings extends Component {
 
           <Text style={{fontSize: 30}}>Settings</Text>
 
-          <Text>How many times a week do you want to answer the question?</Text>
+          <Text>How many times a week do you want to submit a snapshot?</Text>
 
           <TextInput
             style={{height: 40}}
             value={form.reminders_per_week || ''}
             keyboardType='numeric'
-            placeholder="How many times a week do you want to answer the question?"
+            placeholder="How many times a week do you want to submit a snapshot?"
             onChangeText={this.handle_change.bind(this, 'reminders_per_week')}
           />
 
-          <Text>Reminder start hour</Text>
+          <Text>Snapshot reminder start hour</Text>
 
           <TextInput
             style={{height: 40}}
@@ -101,7 +101,7 @@ class Settings extends Component {
             onChangeText={this.handle_change.bind(this, 'start_hr')}
           />
 
-          <Text>Reminder end hour</Text>
+          <Text>Snapshot reminder end hour</Text>
 
           <TextInput
             style={{height: 40}}
@@ -110,6 +110,9 @@ class Settings extends Component {
             placeholder="Reminder end hour"
             onChangeText={this.handle_change.bind(this, 'end_hr')}
           />
+
+          <Text>API Password (set in Flow webapp)</Text>
+
           <TextInput
             style={{height: 40}}
             value={form.api_pw || ''}

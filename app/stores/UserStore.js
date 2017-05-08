@@ -76,7 +76,7 @@ class UserStore {
       this.settings = data.settings;
       keys.push('settings');
     }
-    ToastAndroid.show("Got session keys... " + keys.join(', '), ToastAndroid.SHORT);
+    // ToastAndroid.show("Got session keys... " + keys.join(', '), ToastAndroid.SHORT);
   }
 
   onUserSignout() {

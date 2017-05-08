@@ -126,6 +126,7 @@ class Agent extends Component {
         <ScrollView style={{padding: 15}}>
 
           <Text style={{fontSize: 30}}>Talk to Flow</Text>
+          <Text style={{fontSize: 20}}>Try saying things like 'my status', 'complete task X', 'habit done run'</Text>
 
           { this.render_conversation() }
 

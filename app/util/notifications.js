@@ -17,7 +17,7 @@ const notifications = {
 		    // (required) Called when a remote or local notification is opened or received
 		    onNotification: function(notification) {
 		        console.log( 'NOTIFICATION:', notification );
-		        nav && nav.dispatch({ type: 'Navigate', routeName: 'Snapshot', params: {} });
+		        nav && nav.navigate('Snapshot');
 		    },
 
 		    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
