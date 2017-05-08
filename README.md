@@ -1,10 +1,6 @@
-# Flow Dashboard - Mobile Client
+# Flow Snapshot
 
-This is a mobile client for Android (and hopefully soon iOS) to interact with [Flow Dashboard](https://github.com/onejgordon/flow-dashboard/).
-
-## TODO
-
-* Local storage of suggestions for activities / places / people
+This is a mobile client for Android (and hopefully soon iOS) to submit snapshots to [Flow Dashboard](https://github.com/onejgordon/flow-dashboard/)
 
 ## Commands
 
