@@ -44,7 +44,7 @@ class Agent extends Component {
     this.setState({form});
   }
 
-  add_reply(reply) {
+  add_reply_message(reply) {
     let message = {
       text: reply,
       ts: new Date().getTime(),
@@ -59,7 +59,7 @@ class Agent extends Component {
     });
   }
 
-  add_send(text, cb) {
+  add_sent_message(text, cb) {
     let message = {
       text: text,
       ts: new Date().getTime(),
@@ -77,19 +77,20 @@ class Agent extends Component {
   send() {
     let {screenProps} = this.props;
     let {form} = this.state;
-    let params = {
-      message: form.message
-    };
-    this.add_send(form.message, () => {
-      api.post(screenProps.user, screenProps.settings.api_pw, '/api/agent/flowapp/request', params, (res) => {
-        if (res.success && res.reply) {
-          this.add_reply(res.reply);
-        } else {
-          ToastAndroid.show("Something odd happened", ToastAndroid.SHORT);
-          this.setState({sending: false});
-        }
+    if (form.message && form.message.length > 0) {
+      let params = {
+        message: form.message
+      };
+      this.add_sent_message(form.message, () => {
+        api.post(screenProps.user, screenProps.settings.api_pw, '/api/agent/flowapp/request', params, (res) => {
+          if (res.success && res.reply) {
+            this.add_reply_message(res.reply);
+          } else {
+            this.setState({sending: false});
+          }
+        });
       });
-    });
+    }
   }
 
   render_message(msg) {
@@ -119,29 +120,33 @@ class Agent extends Component {
   render() {
     let {form, sending} = this.state;
     return (
-      <View>
+      <View flex={1}>
 
         <Toolbar navigation={this.props.navigation} />
 
-        <ScrollView style={{padding: 15}}>
+        <View style={styles.frame} flex={1}>
+          <ScrollView keyboardShouldPersistTaps='always' style={{padding: 15}}>
 
-          <Text style={{fontSize: 30}}>Talk to Flow</Text>
-          <Text style={{fontSize: 20}}>Try saying things like 'my status', 'complete task X', 'habit done run'</Text>
+            <Text style={{fontSize: 30}}>Talk to Flow</Text>
+            <Text style={{fontSize: 20}}>Try saying things like 'my status', 'complete task X', 'habit done run'</Text>
 
-          { this.render_conversation() }
+            { this.render_conversation() }
 
-          <TextInput
-            placeholder="Enter your message..."
-            returnKeyType="send"
-            onSubmitEditing={this.send.bind(this)}
-            onChangeText={this.change_text.bind(this)} value={form.message} />
+            <TextInput
+              placeholder="Enter your message..."
+              returnKeyType="send"
+              onSubmitEditing={this.send.bind(this)}
+              onChangeText={this.change_text.bind(this)} value={form.message} />
 
-          <FlowButton
-            onPress={this.send.bind(this)}
-            title="Send"
-            disabled={sending}
-          />
-        </ScrollView>
+            <FlowButton
+              onPress={this.send.bind(this)}
+              onTouchTap={this.send.bind(this)}
+              title="Send"
+              disabled={sending}
+            />
+          </ScrollView>
+        </View>
+
       </View>
     );
   }
@@ -149,7 +154,9 @@ class Agent extends Component {
 
 
 const styles = StyleSheet.create({
-
+  frame: {
+    padding: 10
+  }
 });
 
 Agent.propTypes = {
