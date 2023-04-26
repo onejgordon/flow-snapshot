@@ -1,3 +1,5 @@
+> **_NOTE:_**  This repository is no longer maintained.
+
 # Flow Snapshot
 
 This is a mobile client for Android (and hopefully soon iOS) to submit snapshots to [Flow Dashboard](https://github.com/onejgordon/flow-dashboard/)
